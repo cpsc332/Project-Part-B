@@ -1,5 +1,13 @@
 {
     "require": {
         "vlucas/phpdotenv": "^5.6"
-    }
+    },
+    "name": "CPSC-332/Project",
+    "description": "Ticket booking system project",
+    "license": "",
+    "autoload": {
+        "psr-4": {
+            "": "includes/"
+        }
+    } 
 }

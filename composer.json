@@ -4,7 +4,7 @@
     },
     "name": "cpsc332/project",
     "description": "Ticket booking system project",
-    "license": "",
+    "license": "proprietary",
     "autoload": {
         "psr-4": {
             "": "includes/"

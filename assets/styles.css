@@ -1,0 +1,19 @@
+#header-style {
+  position: sticky; 
+  padding: 1em; 
+  background: white; 
+  z-index: 1000; 
+  color: blue; 
+  font-size: 3em; 
+  text-align: center;
+}
+
+#footer-style {
+  text-align: center; 
+  padding: 1em; 
+  font-size: 3em; 
+  background-color: white; 
+  color: blue; 
+  text-align: center;
+}
+

@@ -1,31 +1,22 @@
 <?php
-// connection
-$host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "theatre_booking";
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/functions.php';
 
-$conn = mysqli_connect($host, $user, $pass, $dbname);
+// Get basic table counts using PDO from db.php
+$stats = [];
+$tables = ['theatre', 'auditorium', 'seat', 'movie', 'showtime', 'customer', 'ticket'];
 
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
-// function to count rows in a table
-function countRows($conn, $table) {
-    $sql = "SELECT COUNT(*) AS c FROM $table";
-    $result = mysqli_query($conn, $sql);
-
-    if ($row = mysqli_fetch_assoc($result)) {
-        return $row['c'];
-    }
-    return 0;
+foreach ($tables as $table) {
+    $stmt = $pdo->query("SELECT COUNT(*) AS c FROM {$table}");
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stats[$table] = (int)($row['c'] ?? 0);
 }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Theatre Booking</title>
+    <meta charset="UTF-8">
+    <title>Theatre Booking – Home</title>
 </head>
 <body>
 
@@ -49,31 +40,31 @@ function countRows($conn, $table) {
     </tr>
     <tr>
         <td>theatre</td>
-        <td><?php echo countRows($conn, "theatre"); ?></td>
+        <td><?php echo $stats['theatre']; ?></td>
     </tr>
     <tr>
         <td>auditorium</td>
-        <td><?php echo countRows($conn, "auditorium"); ?></td>
+        <td><?php echo $stats['auditorium']; ?></td>
     </tr>
     <tr>
         <td>seat</td>
-        <td><?php echo countRows($conn, "seat"); ?></td>
+        <td><?php echo $stats['seat']; ?></td>
     </tr>
     <tr>
         <td>movie</td>
-        <td><?php echo countRows($conn, "movie"); ?></td>
+        <td><?php echo $stats['movie']; ?></td>
     </tr>
     <tr>
         <td>showtime</td>
-        <td><?php echo countRows($conn, "showtime"); ?></td>
+        <td><?php echo $stats['showtime']; ?></td>
     </tr>
     <tr>
         <td>customer</td>
-        <td><?php echo countRows($conn, "customer"); ?></td>
+        <td><?php echo $stats['customer']; ?></td>
     </tr>
     <tr>
         <td>ticket</td>
-        <td><?php echo countRows($conn, "ticket"); ?></td>
+        <td><?php echo $stats['ticket']; ?></td>
     </tr>
 </table>
 

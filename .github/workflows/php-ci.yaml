@@ -1,0 +1,38 @@
+name: PHP CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo, pdo_mysql
+          coverage: none
+
+        # Needed for using dotenv, your package/module manager basically
+      - name: Validate composer.json (if exists)
+        run: |
+          if [ -f composer.json ]; then
+            composer validate 
+          fi
+
+        # Hash the file composer.json, if it does not exist (therfore giving us no hash '') then dont install
+      - name: Install dependencies
+        if: ${{ hashFiles('composer.json') != '' }}
+        run: composer install --no-interaction --no-progress
+
+      - name: PHP Syntax Check
+        run: |
+          find . -type f -name "*.php" -print0 | xargs -0 -n1 php -l

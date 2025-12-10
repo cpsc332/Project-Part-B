@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/functions.php';
 
-// Get basic table counts using PDO from db.php
+// get basic table counts using PDO from db.php
 $stats = [];
 $tables = ['theatre', 'auditorium', 'seat', 'movie', 'showtime', 'customer', 'ticket'];
 

@@ -54,7 +54,11 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php foreach ($movies as $movie): ?>
             <tr>
                 <td><?php echo $movie['MovieID']; ?></td>
-                <td><?php echo esc($movie['Name']); ?></td>
+               <td>
+                    <a href="showtimes.php?movie_id=<?php echo urlencode($movie['MovieID']); ?>">
+                        <?php echo esc($movie['Name']); ?>
+                    </a>
+                </td>
                 <td><?php echo esc($movie['MPAA']); ?></td>
                 <td><?php echo $movie['Runtime']; ?></td>
                 <td><?php echo $movie['ReleaseDate']; ?></td>

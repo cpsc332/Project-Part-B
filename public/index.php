@@ -25,7 +25,6 @@ foreach ($tables as $table) {
 <h2>Navigation</h2>
 <ul>
     <li><a href="movies.php">Browse Movies</a></li>
-    <li><a href="showtimes.php">Showtime Finder</a></li>
     <li><a href="my_tickets.php">My Tickets</a></li>
     <li><a href="reports.php">Reports</a></li>
 </ul>

@@ -195,7 +195,7 @@ foreach ($seats as $seat) {
           <input type="hidden" name="seats" id="seats-input" value="">
           <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
           <button type="submit" id="checkout-btn" class="checkout-btn" disabled>Proceed to Checkout</button>
-
+        </form>
     </div>
     <!-- JavaScript for seat selection -->
     <script>
@@ -262,7 +262,7 @@ foreach ($seats as $seat) {
         }
 
         // Checkout button click
-        document.getElementById('checkout-btn').addEventListener('submit', function(e) {
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
             if (selectedSeats.length === 0) {
               e.preventDefault();
               return;

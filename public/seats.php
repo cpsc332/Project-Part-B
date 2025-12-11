@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 // Database connections
 require_once '../includes/db.php';
@@ -188,7 +189,13 @@ foreach ($seats as $seat) {
         <h3>Your Selection</h3>
         <p><strong>Seats:</strong> <span id="selected-seats">None</span></p>
         <p><strong>Total:</strong> $<span id="total-price">0.00</span></p>
-        <button id="checkout-btn" class="checkout-btn" disabled>Proceed to Checkout</button>
+
+        <form id="checkout-form" method="POST" action="purchase.php">
+          <input type="hidden" name="showtime_id" value="<?php echo esc($showtime_id); ?>">
+          <input type="hidden" name="seats" id="seats-input" value="">
+          <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
+          <button type="submit" id="checkout-btn" class="checkout-btn" disabled>Proceed to Checkout</button>
+        </form>
     </div>
     <!-- JavaScript for seat selection -->
     <script>
@@ -255,15 +262,14 @@ foreach ($seats as $seat) {
         }
 
         // Checkout button click
-        document.getElementById('checkout-btn').addEventListener('click', function() {
-            if (selectedSeats.length === 0) return;
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            if (selectedSeats.length === 0) {
+              e.preventDefault();
+              return;
+            }
 
-            // Collect seat IDs for form submission
-            const seatIds = selectedSeats.map(s => s.id).join(',');
-
-            // Redirect to purchase page with selected seats
-            // This is for purchase.php to grab information for to process ticket purchasing for seats
-            window.location.href = 'purchase.php?showtime_id=<?php echo $showtime_id; ?>&seats=' + seatIds;
+            // Set hidden input value before form submission
+            document.getElementById('seats-input').value = selectedSeats.map(s => s.id).join(',');
         });
     </script>
 

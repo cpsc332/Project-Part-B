@@ -5,10 +5,10 @@ check:
 
 setup-codespace:
 	sudo apt update
-	sudo apt install mariadb-server mariadb-client
+	sudo apt install  -y mariadb-server mariadb-client
 	sudo service mariadb start
-	sudo apt install php
-	sudo apt install php-mysql
+	sudo apt install -y php
+	sudo apt install -y php-mysql
 
 	sudo mysql -u root < sql/schema.sql
 	php -m | grep -i mysql || true

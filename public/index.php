@@ -44,7 +44,10 @@ foreach ($tables as $table) {
     ul li {
         margin: 8px 0;
     }
-
+    h1 {
+        color: black;
+        text-align: center;
+    }
     ul li a {
         text-decoration: none;
         color: #ffffffff;
@@ -106,16 +109,7 @@ foreach ($tables as $table) {
         echo theatre_header();
     ?>
 
-<h1>Theatre Booking | Part C</h1>
-
-<h2>Navigation</h2>
-<ul>
-    <li><a href="movies.php">Browse Movies</a></li>
-    <li><a href="my_tickets.php">My Tickets</a></li>
-    <li><a href="reports.php">Reports</a></li>
-</ul>
-
-<hr>
+<!-- <h1>Welcome to Theatre Booking System</h1> -->
 
 <h2>Database Status</h2>
 <table border="1" cellpadding="5">

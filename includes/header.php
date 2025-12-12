@@ -12,12 +12,13 @@
 
 	return '
    <header id = "header-style">
+     <h1>Theatre Booking</h1>
        <nav>
-            <a href="index.php">Homepage</a>
-            <a href="movies.php">Movies</a>
-            <a href="my_tickets.php">Tickets</a>
-            <a href="reports.php">Reports</a>
-            ' . $authLinks . '
+            <a href="index.php"><strong>Homepage</strong></a>
+            <a href="movies.php"><strong>Movies</strong></a>
+            <a href="my_tickets.php"><strong>Tickets</strong></a>
+            <a href="reports.php"><strong>Reports</strong></a>
+            <strong> '.  $authLinks  . '</strong>
        </nav>
   </header>
 	';

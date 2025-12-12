@@ -21,7 +21,7 @@ $topLabels = [];
 $topData   = [];
 foreach ($topMovies as $row) {
     $topLabels[] = $row['movie_name'];
-    $topData[]   = (int)$row['tickets_sold'];
+    $topData[]   = (int) $row['tickets_sold'];
 }
 
 $utilLabels = [];
@@ -29,7 +29,7 @@ $utilData   = [];
 foreach ($utilRows as $row) {
     $label = date('m/d H:i', strtotime($row['starttime'])) . ' - ' . $row['theatre_name'];
     $utilLabels[] = $label;
-    $utilData[]   = (float)$row['pct_sold'];
+    $utilData[]   = (float) $row['pct_sold'];
 }
 ?>
 <!DOCTYPE html>

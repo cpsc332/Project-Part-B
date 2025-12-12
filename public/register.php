@@ -31,12 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':hash' => $hash,
             ]);
 
-            $id = (int)$pdo->lastInsertId();
+            $id = (int) $pdo->lastInsertId();
             $userRow = [
                 'CustomerID'  => $id,
                 'Name'        => $name,
                 'Email'       => $email,
-                'PasswordHash'=> $hash,
+                'PasswordHash' => $hash,
                 'Role'        => 'customer',
             ];
             login_user($userRow);
@@ -48,13 +48,108 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html>
+    <style>
+    /* General page style */
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    button {
+        padding: 8px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    /* Navigation links */
+    ul {
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    ul li {
+        margin: 8px 0;
+    }
+    h1 {
+        color: black;
+        text-align: center;
+    }
+    ul li a {
+        text-decoration: none;
+        color: #ffffffff;
+        font-weight: bold;
+        padding: 6px 10px;
+        border-radius: 5px;
+        transition: 0.2s;
+        background-color: #4da3ffff;
+        display: inline-block;
+    }
+
+    ul li a:hover {
+        background-color: #007bff;
+    }
+
+    /* Table styling */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: white;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    th {
+        background-color: #4da3ffff;
+        color: #ffffffff;
+        padding: 12px;
+        text-align: left;
+    }
+
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f0f8ff;
+    }
+
+    /* Links inside table */
+    table a {
+        color: #2a4d7c;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    table a:hover {
+        text-decoration: underline;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+</style>
 <head>
     <meta charset="UTF-8">
     <title><?php echo esc(t('register_heading')); ?></title>
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
 
-<?php include __DIR__ . '/../includes/header.php'; ?>
+<?php include __DIR__ . '/../includes/header.php';
+echo theatre_header();
+?>
 
 <h1><?php echo esc(t('register_heading')); ?></h1>
 
@@ -63,24 +158,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php endif; ?>
 
 <form method="post" action="register.php">
-    <div>
+    <div class="form-group">
         <label>Name:</label>
         <input type="text" name="name" required value="<?php echo isset($name) ? esc($name) : ''; ?>">
     </div>
-    <div>
+    <div class="form-group">
         <label>Email:</label>
         <input type="email" name="email" required value="<?php echo isset($email) ? esc($email) : ''; ?>">
     </div>
-    <div>
+    <div class="form-group">
         <label>Password:</label>
         <input type="password" name="password" required>
     </div>
-    <div>
+    <div class="form-group">
         <label>Confirm Password:</label>
         <input type="password" name="confirm" required>
     </div>
     <button type="submit">Register</button>
 </form>
-
+<?php include __DIR__ . '/../includes/footer.php';
+echo theatre_footer();
+?>
 </body>
 </html>

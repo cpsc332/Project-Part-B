@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: showtimes.php");
     exit();
@@ -49,11 +52,11 @@ if (!empty($errors)) {
 
 try {
     $pdo->beginTransaction();
-    
+
     $stmt = $pdo->prepare("SELECT customerid FROM customer WHERE email = ?");
     $stmt->execute([$customer_email]);
     $customer = $stmt->fetch();
-    
+
     if ($customer) {
         $customer_id = $customer['customerid'];
     } else {
@@ -61,33 +64,33 @@ try {
         $stmt->execute([$customer_name, $customer_email]);
         $customer_id = $pdo->lastInsertId();
     }
-    
+
     $stmt = $pdo->prepare("CALL sell_ticket(?, ?, ?, ?, @ticket_id)");
     $stmt->execute([$showtime_id, $seat_id, $customer_id, $discount_code]);
-    
+
     $result = $pdo->query("SELECT @ticket_id AS ticket_id")->fetch();
     $ticket_id = $result['ticket_id'];
-    
+
     $pdo->commit();
-    
+
     $_SESSION['flash_message'] = 'Ticket purchased successfully! Ticket ID: #' . $ticket_id;
     $_SESSION['flash_type'] = 'success';
     header("Location: my_tickets.php?email=" . urlencode($customer_email));
     exit();
-    
+
 } catch (PDOException $e) {
     $pdo->rollBack();
-    
+
     $error_message = $e->getMessage();
-    if (strpos($error_message, 'Seat already sold') !== false) {
+    if (str_contains($error_message, 'Seat already sold')) {
         $_SESSION['flash_message'] = 'Sorry, this seat has already been taken. Please select another seat.';
-    } elseif (strpos($error_message, 'does not belong') !== false) {
+    } elseif (str_contains($error_message, 'does not belong')) {
         $_SESSION['flash_message'] = 'Invalid seat selection for this showtime.';
     } else {
         $_SESSION['flash_message'] = 'An error occurred while processing your purchase. Please try again.';
     }
     $_SESSION['flash_type'] = 'error';
-    
+
     header("Location: seats.php?showtime_id=" . $showtime_id);
     exit();
 }

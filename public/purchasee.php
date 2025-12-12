@@ -2,11 +2,11 @@
 require_once __DIR__ . '/../includes/init.php';
 require_login();
 
-$showtime_id = (int)param('showtime_id', 0);
+$showtime_id = (int) param('showtime_id', 0);
 $seatsParam  = trim(param('seats', '', 'GET'));
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $showtime_id = (int)param('showtime_id', 0, 'POST');
+    $showtime_id = (int) param('showtime_id', 0, 'POST');
     $seatsParam  = trim(param('seats', '', 'POST'));
 }
 
@@ -63,7 +63,8 @@ if (count($seatRows) !== count($seatIds)) {
 
 $dynamicMult = 1.0;
 
-function compute_line_price(array $seatRow, float $basePrice, float $dynamicMult): float {
+function compute_line_price(array $seatRow, float $basePrice, float $dynamicMult): float
+{
     $price = $basePrice;
     $st = strtolower($seatRow['SeatType']);
     if ($st === 'premium') {
@@ -117,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
                 throw new Exception('Invalid or inactive gift code.');
             }
 
-            $minTickets = (int)$gift['BundleMinTickets'];
+            $minTickets = (int) $gift['BundleMinTickets'];
             if (count($seatIds) < $minTickets) {
                 throw new Exception("This gift code requires at least {$minTickets} tickets.");
             }
@@ -126,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
                 throw new Exception('This gift code has been fully used.');
             }
 
-            $discountMult = max(0.0, 1.0 - ((float)$gift['DiscountPercent'] / 100.0));
+            $discountMult = max(0.0, 1.0 - ((float) $gift['DiscountPercent'] / 100.0));
 
             $upd = $pdo->prepare("
                 UPDATE gift_code
@@ -140,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
         }
 
         $user = current_user();
-        $customerId = (int)$user['id'];
+        $customerId = (int) $user['id'];
 
         // Insert tickets
         $insert = $pdo->prepare("
@@ -149,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
         ");
 
         foreach ($seatRows as $seatRow) {
-            $linePrice = compute_line_price($seatRow, (float)$showtime['BasePrice'], $dynamicMult);
+            $linePrice = compute_line_price($seatRow, (float) $showtime['BasePrice'], $dynamicMult);
             $linePrice *= $discountMult;
             $linePrice = round($linePrice, 2);
 
@@ -161,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
                 ':discount' => ($giftCode !== '' ? $giftCode : null),
             ]);
 
-            $successTicketIds[] = (int)$pdo->lastInsertId();
+            $successTicketIds[] = (int) $pdo->lastInsertId();
         }
 
         $pdo->commit();
@@ -173,6 +174,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
 ?>
 <!DOCTYPE html>
 <html>
+    <style>
+    /* General page style */
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        padding: 8px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    /* Navigation links */
+    ul {
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    ul li {
+        margin: 8px 0;
+    }
+    h1 {
+        color: black;
+        text-align: center;
+    }
+    ul li a {
+        text-decoration: none;
+        color: #ffffffff;
+        font-weight: bold;
+        padding: 6px 10px;
+        border-radius: 5px;
+        transition: 0.2s;
+        background-color: #4da3ffff;
+        display: inline-block;
+    }
+
+    ul li a:hover {
+        background-color: #007bff;
+    }
+
+    /* Table styling */
+    table {
+        max-width: 600px;
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: white;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    th {
+        background-color: #4da3ffff;
+        color: #ffffffff;
+        padding: 12px;
+        text-align: left;
+    }
+
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f0f8ff;
+    }
+
+    /* Links inside table */
+    table a {
+        color: #2a4d7c;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    table a:hover {
+        text-decoration: underline;
+    }
+    #purchaseForm {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 400px;
+        width: 100%;
+    }
+
+</style>
 <head>
     <meta charset="UTF-8">
     <title>Checkout</title>
@@ -182,8 +277,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
 
     <?php
         require_once __DIR__ . '/../includes/header.php';
-        echo theatre_header();
-    ?>
+echo theatre_header();
+?>
 
 <h1>Checkout</h1>
 
@@ -216,13 +311,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
             <th>Price (before gift code)</th>
         </tr>
         <?php
-        $subTotal = 0.0;
-        foreach ($seatRows as $seatRow):
-            $linePrice = compute_line_price($seatRow, (float)$showtime['BasePrice'], $dynamicMult);
-            $subTotal += $linePrice;
-        ?>
+    $subTotal = 0.0;
+foreach ($seatRows as $seatRow):
+    $linePrice = compute_line_price($seatRow, (float) $showtime['BasePrice'], $dynamicMult);
+    $subTotal += $linePrice;
+    ?>
             <tr>
-                <td>Row <?php echo (int)$seatRow['RowNumber']; ?> Seat <?php echo (int)$seatRow['SeatNumber']; ?></td>
+                <td>Row <?php echo (int) $seatRow['RowNumber']; ?> Seat <?php echo (int) $seatRow['SeatNumber']; ?></td>
                 <td><?php echo esc($seatRow['SeatType']); ?></td>
                 <td>$<?php echo number_format($linePrice, 2); ?></td>
             </tr>
@@ -245,9 +340,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
         <?php endif; ?>
     </p>
 
-    <form method="post" action="purchasee.php">
+    <form method="post" action="purchasee.php" id="purchaseForm">
         <input type="hidden" name="confirm_purchase" value="1">
-        <input type="hidden" name="showtime_id" value="<?php echo (int)$showtime_id; ?>">
+        <input type="hidden" name="showtime_id" value="<?php echo (int) $showtime_id; ?>">
         <input type="hidden" name="seats" value="<?php echo esc($seatsParam); ?>">
 
         <div>

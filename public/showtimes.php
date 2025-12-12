@@ -53,11 +53,11 @@ $sql = "
 //    AND s.StartTime >= NOW()
 
 // Theatre filter if theatre is selected for filter
-if ($theatre_id){
-  $sql .= " AND t.TheatreID = :theatre_id";
+if ($theatre_id) {
+    $sql .= " AND t.TheatreID = :theatre_id";
 }
 if ($date) {
-  $sql .= " AND DATE(s.StartTime) = :date";
+    $sql .= " AND DATE(s.StartTime) = :date";
 }
 $sql .= " ORDER BY t.Name, s.StartTime";
 
@@ -126,8 +126,8 @@ foreach ($showtimes as $show) {
 <body>
     <?php
         require_once __DIR__ . '/../includes/header.php';
-        echo theatre_header();
-    ?>
+echo theatre_header();
+?>
     <a href="movies.php?id=<?php echo esc($movie_id); ?>" class="back-link"> ← Back to Movie Details</a>
 
     <!-- Movie Info Header -->
@@ -202,8 +202,8 @@ foreach ($showtimes as $show) {
     </div>
 
     <?php
-        require_once __DIR__ . '/../includes/footer.php';
-        echo theatre_footer();
-    ?>
+    require_once __DIR__ . '/../includes/footer.php';
+echo theatre_footer();
+?>
 </body>
 </html>

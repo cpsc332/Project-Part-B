@@ -9,8 +9,8 @@ $tables = ['theatre', 'auditorium', 'seat', 'movie', 'showtime', 'customer', 'ti
 foreach ($tables as $table) {
     $stmt = $pdo->query("SELECT COUNT(*) AS c FROM {$table}");
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $stats[$table] = (int)($row['c'] ?? 0);
-    
+    $stats[$table] = (int) ($row['c'] ?? 0);
+
 }
 
 ?>
@@ -28,13 +28,13 @@ foreach ($tables as $table) {
 
     }
 
-    button { 
-        padding: 8px 20px; 
-        background: #007bff; 
-        color: white; 
-        border: none; 
-        border-radius: 4px; 
-        cursor: pointer; 
+    button {
+        padding: 8px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
     }
 
     /* Navigation links */
@@ -150,8 +150,8 @@ foreach ($tables as $table) {
 </table>
 
     <?php
-        require_once __DIR__ . '/../includes/footer.php';
-        echo theatre_footer();
-    ?>
+    require_once __DIR__ . '/../includes/footer.php';
+echo theatre_footer();
+?>
 </body>
 </html>

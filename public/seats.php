@@ -131,8 +131,8 @@ foreach ($seats as $seat) {
 <body>
     <?php
         require_once __DIR__ . '/../includes/header.php';
-        echo theatre_header();
-    ?>
+echo theatre_header();
+?>
     <a href="showtimes.php?movie_id=<?php echo esc($showtime['MovieID']); ?>" class="back-link">← Back to Showtimes</a>
 
     <!-- Showtime Info Header -->
@@ -164,7 +164,7 @@ foreach ($seats as $seat) {
                 <?php foreach ($row_seats as $seat):
                     $is_taken = in_array($seat['SeatID'], $taken_seats);
                     $type_class = strtolower($seat['SeatType']);
-                ?>
+                    ?>
                     <button
                         class="seat <?php echo $type_class; ?> <?php echo $is_taken ? 'taken' : ''; ?>"
                         data-seat-id="<?php echo esc($seat['SeatID']); ?>"
@@ -279,7 +279,7 @@ foreach ($seats as $seat) {
 
     <?php
         require_once __DIR__ . '/../includes/footer.php';
-        echo theatre_footer();
-    ?>
+echo theatre_footer();
+?>
 </body>
 </html>

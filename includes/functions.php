@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 
 // Used for data sanitization !!!
-function esc($str) {
-    return htmlspecialchars($str, ENT_QUOTES,"UTF-8");
+function esc($str)
+{
+    return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
 }
 
 
 // Generate a token for security
-function csrf_token() {
+function csrf_token()
+{
     if (!isset($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
@@ -16,15 +20,17 @@ function csrf_token() {
 }
 
 // Use a token for security !!!!!!!!!!!!!
-function check_token($token) {
-    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'],  $token);
+function check_token($token)
+{
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 
 // Allows variables to have a default if result isnt found
 // Ex:
 // $id = param('id', 0, 'GET');
 // if failed to GET id, id will be 0, else id will be what was recieved
-function param(string $key, $default = null, string $source = 'REQUEST') {
+function param(string $key, $default = null, string $source = 'REQUEST')
+{
     switch (strtoupper($source)) {
         case 'GET':
             return $_GET[$key] ?? $default;
@@ -35,4 +41,3 @@ function param(string $key, $default = null, string $source = 'REQUEST') {
             return $_REQUEST[$key] ?? $default;
     }
 }
-?>

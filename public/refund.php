@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: my_tickets.php");
     exit();
@@ -27,11 +30,11 @@ if (empty($ticket_id) || !is_numeric($ticket_id)) {
 
 try {
     $pdo->beginTransaction();
-    
+
     $stmt = $pdo->prepare("SELECT t.ticketid, t.status, t.customerid, c.email, s.starttime, m.name AS movie_name FROM ticket t JOIN customer c ON t.customerid = c.customerid JOIN showtime s ON t.showtimeid = s.showtimeid JOIN movie m ON s.movieid = m.movieid WHERE t.ticketid = ?");
     $stmt->execute([$ticket_id]);
     $ticket = $stmt->fetch();
-    
+
     if (!$ticket) {
         $pdo->rollBack();
         $_SESSION['flash_message'] = 'Ticket not found.';
@@ -39,7 +42,7 @@ try {
         header("Location: my_tickets.php");
         exit();
     }
-    
+
     if ($ticket['status'] === 'REFUNDED') {
         $pdo->rollBack();
         $_SESSION['flash_message'] = 'This ticket has already been refunded.';
@@ -47,7 +50,7 @@ try {
         header("Location: my_tickets.php?email=" . urlencode($ticket['email']));
         exit();
     }
-    
+
     if ($ticket['status'] === 'USED') {
         $pdo->rollBack();
         $_SESSION['flash_message'] = 'Cannot refund a ticket that has already been used.';
@@ -55,10 +58,10 @@ try {
         header("Location: my_tickets.php?email=" . urlencode($ticket['email']));
         exit();
     }
-    
+
     $showtime = strtotime($ticket['starttime']);
     $current_time = time();
-    
+
     if ($current_time > $showtime) {
         $pdo->rollBack();
         $_SESSION['flash_message'] = 'Cannot refund tickets for showtimes that have already passed.';
@@ -66,7 +69,7 @@ try {
         header("Location: my_tickets.php?email=" . urlencode($ticket['email']));
         exit();
     }
-    
+
     $hours_before_showtime = ($showtime - $current_time) / 3600;
     if ($hours_before_showtime < 2) {
         $pdo->rollBack();
@@ -75,10 +78,10 @@ try {
         header("Location: my_tickets.php?email=" . urlencode($ticket['email']));
         exit();
     }
-    
+
     $stmt = $pdo->prepare("UPDATE ticket SET status = 'REFUNDED' WHERE ticketid = ?");
     $stmt->execute([$ticket_id]);
-    
+
     if ($stmt->rowCount() === 0) {
         $pdo->rollBack();
         $_SESSION['flash_message'] = 'Failed to process refund. Please try again.';
@@ -86,15 +89,15 @@ try {
         header("Location: my_tickets.php?email=" . urlencode($ticket['email']));
         exit();
     }
-    
+
     $pdo->commit();
-    
+
     $_SESSION['flash_message'] = 'Ticket #' . $ticket_id . ' for "' . $ticket['movie_name'] . '" has been successfully refunded.';
     $_SESSION['flash_type'] = 'success';
-    
+
     header("Location: my_tickets.php?email=" . urlencode($ticket['email']));
     exit();
-    
+
 } catch (PDOException $e) {
     $pdo->rollBack();
     error_log("Refund error for ticket $ticket_id: " . $e->getMessage());

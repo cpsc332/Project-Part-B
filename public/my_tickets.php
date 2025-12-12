@@ -13,7 +13,7 @@ $searched = false;
 
 if (!empty($search_email) || !empty($search_ticket_id)) {
     $searched = true;
-    
+
     try {
         if (!empty($search_email)) {
             if (!filter_var($search_email, FILTER_VALIDATE_EMAIL)) {
@@ -21,7 +21,7 @@ if (!empty($search_email) || !empty($search_ticket_id)) {
                 $_SESSION['flash_type'] = 'error';
             } else {
                 $stmt = $pdo->prepare("
-                    SELECT 
+                    SELECT
                         t.ticketid,
                         t.price,
                         t.discounttype,
@@ -55,7 +55,7 @@ if (!empty($search_email) || !empty($search_ticket_id)) {
             }
         } elseif (!empty($search_ticket_id) && is_numeric($search_ticket_id)) {
             $stmt = $pdo->prepare("
-                SELECT 
+                SELECT
                     t.ticketid,
                     t.price,
                     t.discounttype,
@@ -99,7 +99,7 @@ $flash_message = null;
 if (isset($_SESSION['flash_message'])) {
     $flash_message = [
         'text' => $_SESSION['flash_message'],
-        'type' => $_SESSION['flash_type'] ?? 'info'
+        'type' => $_SESSION['flash_type'] ?? 'info',
     ];
     unset($_SESSION['flash_message']);
     unset($_SESSION['flash_type']);
@@ -154,8 +154,8 @@ if (isset($_SESSION['flash_message'])) {
     <body>
             <?php
                 require_once __DIR__ . '/../includes/header.php';
-                echo theatre_header();
-            ?>
+echo theatre_header();
+?>
         <div class="container">
 
             <?php if ($flash_message): ?>
@@ -168,7 +168,7 @@ if (isset($_SESSION['flash_message'])) {
                 <h1>My Tickets</h1>
                 <p>Look up your tickets by email or ticket ID</p>
             </div>
-            
+
             <div class="search-section">
                 <form method="GET" action="my_tickets.php">
                     <div class="form-row">
@@ -176,21 +176,21 @@ if (isset($_SESSION['flash_message'])) {
                             <label for="email">Search by Email:</label>
                             <input type="email" id="email" name="email" class="form-control" value="<?php echo esc($search_email); ?>" placeholder="your.email@example.com">
                         </div>
-                        
+
                         <div class="form-divider">
                             <span>OR</span>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="ticket_id">Search by Ticket ID:</label>
                             <input type="text" id="ticket_id" name="ticket_id" class="form-control" value="<?php echo esc($search_ticket_id); ?>" placeholder="123456">
                         </div>
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary">Search Tickets</button>
                 </form>
             </div>
-            
+
             <?php if ($searched): ?>
                 <div class="results-section">
                     <?php if (empty($tickets)): ?>
@@ -199,7 +199,7 @@ if (isset($_SESSION['flash_message'])) {
                         </div>
                     <?php else: ?>
                         <h2>Your Tickets (<?php echo count($tickets); ?> found)</h2>
-                        
+
                         <div class="tickets-list">
                             <?php foreach ($tickets as $ticket): ?>
                                 <div class="ticket-card">
@@ -207,10 +207,10 @@ if (isset($_SESSION['flash_message'])) {
                                         <div class="ticket-id">Ticket #<?php echo esc($ticket['ticketid']); ?></div>
                                         <div class="ticket-status status-<?php echo strtolower(esc($ticket['status'])); ?>"><?php echo esc($ticket['status']); ?></div>
                                     </div>
-                                    
+
                                     <div class="ticket-body">
                                         <h3 class="movie-title"><?php echo esc($ticket['movie_name']); ?></h3>
-                                        
+
                                         <div class="ticket-details">
                                             <div class="detail-row">
                                                 <span class="label">Theatre:</span>
@@ -239,10 +239,10 @@ if (isset($_SESSION['flash_message'])) {
                                                     <?php if ($ticket['discounttype'] && strtoupper($ticket['discounttype']) !== 'NONE'): ?>
                                                         <span class="discount-badge"><?php echo esc($ticket['discounttype']); ?></span>
                                                     <?php endif; ?>
-                                                </span>                                   
+                                                </span>
                                             </div>
                                         </div>
-                                        
+
                                         <?php if ($ticket['status'] === 'PURCHASED' || $ticket['status'] === 'RESERVED'): ?>
                                             <div class="ticket-actions">
                                                 <form method="POST" action="refund.php">
@@ -262,9 +262,9 @@ if (isset($_SESSION['flash_message'])) {
 
         </div>
             <?php
-                require_once __DIR__ . '/../includes/footer.php';
-                echo theatre_footer();
-            ?>
+    require_once __DIR__ . '/../includes/footer.php';
+echo theatre_footer();
+?>
     </body>
 </html>
 

@@ -37,13 +37,13 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
         padding: 50px;
     }
 
-    button { 
-        padding: 8px 20px; 
-        background: #007bff; 
-        color: white; 
-        border: none; 
-        border-radius: 4px; 
-        cursor: pointer; 
+    button {
+        padding: 8px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
     }
 
     /* Navigation links */
@@ -114,8 +114,8 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <?php
         require_once __DIR__ . '/../includes/header.php';
-        echo theatre_header();
-    ?>
+echo theatre_header();
+?>
 <h1>Browse Movies</h1>
 
 <form method="get" action="movies.php">
@@ -159,8 +159,8 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <a href="index.php">Back to Home</a>
 
     <?php
-        require_once __DIR__ . '/../includes/footer.php';
-        echo theatre_footer();
-    ?>
+    require_once __DIR__ . '/../includes/footer.php';
+echo theatre_footer();
+?>
 </body>
 </html>

@@ -33,6 +33,7 @@ foreach ($tables as $table) {
         border: none; 
         border-radius: 4px; 
         cursor: pointer; 
+        padding: 50px;
     }
 
     /* Navigation links */

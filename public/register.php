@@ -52,15 +52,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     /* General page style */
     body {
         font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
     }
 
-    button { 
-        padding: 8px 20px; 
-        background: #007bff; 
-        color: white; 
-        border: none; 
-        border-radius: 4px; 
-        cursor: pointer; 
+    button {
+        padding: 8px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+        max-width: 600px;
     }
 
     /* Navigation links */
@@ -128,6 +135,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     table a:hover {
         text-decoration: underline;
     }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
 </style>
 <head>
     <meta charset="UTF-8">
@@ -145,19 +156,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <form method="post" action="register.php">
     <div>
-        <label>Name:</label>
+        <label class="form-group">Name:</label>
         <input type="text" name="name" required value="<?php echo isset($name) ? esc($name) : ''; ?>">
     </div>
     <div>
-        <label>Email:</label>
+        <label class="form-group">Email:</label>
         <input type="email" name="email" required value="<?php echo isset($email) ? esc($email) : ''; ?>">
     </div>
     <div>
-        <label>Password:</label>
+        <label class="form-group">Password:</label>
         <input type="password" name="password" required>
     </div>
     <div>
-        <label>Confirm Password:</label>
+        <label class="form-group">Confirm Password:</label>
         <input type="password" name="confirm" required>
     </div>
     <button type="submit">Register</button>

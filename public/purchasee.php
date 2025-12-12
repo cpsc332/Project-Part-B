@@ -177,15 +177,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
     /* General page style */
     body {
         font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
-    button { 
-        padding: 8px 20px; 
-        background: #007bff; 
-        color: white; 
-        border: none; 
-        border-radius: 4px; 
-        cursor: pointer; 
+    button {
+        padding: 8px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
     }
 
     /* Navigation links */
@@ -218,6 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
 
     /* Table styling */
     table {
+        max-width: 600px;
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
@@ -252,6 +256,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
 
     table a:hover {
         text-decoration: underline;
+    }
+    #purchaseForm {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 400px;
+        width: 100%;
     }
 </style>
 <head>
@@ -326,7 +338,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
         <?php endif; ?>
     </p>
 
-    <form method="post" action="purchasee.php">
+    <form method="post" action="purchasee.php" id="purchaseForm">
         <input type="hidden" name="confirm_purchase" value="1">
         <input type="hidden" name="showtime_id" value="<?php echo (int)$showtime_id; ?>">
         <input type="hidden" name="seats" value="<?php echo esc($seatsParam); ?>">

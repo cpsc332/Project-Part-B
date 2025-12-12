@@ -43,6 +43,7 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
         border: none; 
         border-radius: 4px; 
         cursor: pointer; 
+        padding: 50px;
     }
 
     /* Navigation links */

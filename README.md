@@ -313,13 +313,3 @@ This should result in an error saying that the seat is already sold or reserved 
 CALL backup_full_clone;
 SHOW TABLES LIKE 'back_%';
 ```
-
----
-
-## Contributors
-
-This project was developed as part of CPSC 332 - Database Systems.
-
-## License
-
-Educational use only.

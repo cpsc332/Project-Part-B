@@ -15,3 +15,6 @@ setup-codespace:
 	
 #	After, run the following
 # 	export PATH=/usr/bin:$PATH
+
+fix:
+	./vendor/bin/php-cs-fixer fix .

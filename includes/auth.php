@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 function login_user(array $userRow): void
 {
     $_SESSION['user'] = [
-        'id'    => (int)$userRow['CustomerID'],
+        'id'    => (int) $userRow['CustomerID'],
         'name'  => $userRow['Name'],
         'email' => $userRow['Email'],
         'role'  => $userRow['Role'] ?? 'customer',

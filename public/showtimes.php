@@ -90,7 +90,7 @@ foreach ($showtimes as $show) {
     <link rel="stylesheet" href="assets/styles.css">
     <style>
         /* Temporary styling, could put it into styles.css however it may conflict with other styling from index, unsure */
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #fafafa; }
+        body { font-family: Arial, sans-serif; margin: 0 auto; padding: 20px; background: #fafafa; }
         .back-link { color: #007bff; text-decoration: none; }
 
         /* Movie header */

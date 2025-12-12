@@ -77,7 +77,7 @@ foreach ($seats as $seat) {
     <link rel="stylesheet" href="assets/styles.css">
     <style>
     /* Temporary styling if we have to move it to a styles.css sheet */
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #fafafa; }
+    body { font-family: Arial, sans-serif; margin: 0 auto; padding: 20px; background: #fafafa; }
     .back-link { color: #007bff; text-decoration: none; }
 
     /* Showtime info header */
@@ -195,11 +195,10 @@ foreach ($seats as $seat) {
         <p><strong>Seats:</strong> <span id="selected-seats">None</span></p>
         <p><strong>Total:</strong> $<span id="total-price">0.00</span></p>
 
-        <form id="checkout-form" method="POST" action="purchase.php">
-          <input type="hidden" name="showtime_id" value="<?php echo esc($showtime_id); ?>">
-          <input type="hidden" name="seats" id="seats-input" value="">
-          <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
-          <button type="submit" id="checkout-btn" class="checkout-btn" disabled>Proceed to Checkout</button>
+        <form id="checkout-form" method="POST" action="purchasee.php">
+            <input type="hidden" name="showtime_id" value="<?php echo (int)$showtime_id; ?>">
+            <input type="hidden" name="seats" id="seats-input" value="">
+            <button type="submit" id="checkout-btn" class="checkout-btn" disabled>Proceed to Checkout</button>
         </form>
     </div>
     <!-- JavaScript for seat selection -->

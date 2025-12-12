@@ -46,13 +46,13 @@ $in = implode(',', array_fill(0, count($seatIds), '?'));
 $sql = "
     SELECT SeatID, RowNumber, SeatNumber, SeatType
     FROM seat
-    WHERE AuditoriumID = :aud_id AND SeatID IN ($in)
+    WHERE AuditoriumID = ? AND SeatID IN ($in)
     ORDER BY RowNumber, SeatNumber
 ";
 $stmt = $pdo->prepare($sql);
-$stmt->bindValue(':aud_id', $showtime['AuditoriumID'], PDO::PARAM_INT);
+$stmt->bindValue(1, $showtime['AuditoriumID'], PDO::PARAM_INT);
 foreach ($seatIds as $i => $sid) {
-    $stmt->bindValue($i + 1, $sid, PDO::PARAM_INT);
+    $stmt->bindValue($i + 2, $sid, PDO::PARAM_INT);
 }
 $stmt->execute();
 $seatRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -61,7 +61,7 @@ if (count($seatRows) !== count($seatIds)) {
     die('One or more seats do not belong to this showtime auditorium.');
 }
 
-$dynamicMult = dynamic_price_multiplier($showtime['StartTime']);
+$dynamicMult = 1.0;
 
 function compute_line_price(array $seatRow, float $basePrice, float $dynamicMult): float {
     $price = $basePrice;
@@ -78,7 +78,7 @@ function compute_line_price(array $seatRow, float $basePrice, float $dynamicMult
 $error = '';
 $successTicketIds = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST') === '1') {
     $giftCode = trim(param('gift_code', '', 'POST'));
 
     $discountMult = 1.0;
@@ -89,13 +89,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $takenStmt = $pdo->prepare("
             SELECT SeatID
             FROM ticket
-            WHERE ShowtimeID = :shid
+            WHERE ShowtimeID = ?
               AND SeatID IN ($in)
               AND Status IN ('RESERVED', 'PURCHASED', 'USED')
         ");
-        $takenStmt->bindValue(':shid', $showtime_id, PDO::PARAM_INT);
+        $takenStmt->bindValue(1, $showtime_id, PDO::PARAM_INT);
         foreach ($seatIds as $i => $sid) {
-            $takenStmt->bindValue($i + 1, $sid, PDO::PARAM_INT);
+            $takenStmt->bindValue($i + 2, $sid, PDO::PARAM_INT);
         }
         $takenStmt->execute();
         $already = $takenStmt->fetchAll(PDO::FETCH_COLUMN);
@@ -176,10 +176,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Checkout</title>
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
 
-<?php include __DIR__ . '/../includes/header.php'; ?>
+    <?php
+        require_once __DIR__ . '/../includes/header.php';
+        echo theatre_header();
+    ?>
 
 <h1>Checkout</h1>
 
@@ -190,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php echo date('l, F j, Y g:i A', strtotime($showtime['StartTime'])); ?>
 </p>
 
-<?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error): ?>
+<?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST') === '1' && !$error): ?>
 
     <h2>Purchase Complete</h2>
     <p>Your tickets have been purchased.</p>
@@ -241,7 +245,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
     </p>
 
-    <form method="post" action="purchase.php">
+    <form method="post" action="purchasee.php">
+        <input type="hidden" name="confirm_purchase" value="1">
         <input type="hidden" name="showtime_id" value="<?php echo (int)$showtime_id; ?>">
         <input type="hidden" name="seats" value="<?php echo esc($seatsParam); ?>">
 

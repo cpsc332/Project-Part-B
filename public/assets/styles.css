@@ -3,16 +3,18 @@ body {
   overflow: scroll;
 }
 #header-style {
+  font-family: Arial, sans-serif;
   position: sticky; 
   padding: 1em; 
   background: white; 
   z-index: 1000; 
-  color: blue; 
+  color: black; 
   text-align: center;
   border-bottom: 1px solid black;
   margin-bottom: 50px;
 }
 #header-style a {
+  font-family: Arial, sans-serif;
   font-size: 40px;
   color: black;
   text-decoration: none;

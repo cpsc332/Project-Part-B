@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 
 // Used for data sanitization !!!
 function esc($str)

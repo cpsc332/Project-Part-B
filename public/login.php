@@ -33,6 +33,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html>
+    <style>
+    /* General page style */
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    button { 
+        padding: 8px 20px; 
+        background: #007bff; 
+        color: white; 
+        border: none; 
+        border-radius: 4px; 
+        cursor: pointer; 
+    }
+
+    /* Navigation links */
+    ul {
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    ul li {
+        margin: 8px 0;
+    }
+    h1 {
+        color: black;
+        text-align: center;
+    }
+    ul li a {
+        text-decoration: none;
+        color: #ffffffff;
+        font-weight: bold;
+        padding: 6px 10px;
+        border-radius: 5px;
+        transition: 0.2s;
+        background-color: #4da3ffff;
+        display: inline-block;
+    }
+
+    ul li a:hover {
+        background-color: #007bff;
+    }
+
+    /* Table styling */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: white;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    th {
+        background-color: #4da3ffff;
+        color: #ffffffff;
+        padding: 12px;
+        text-align: left;
+    }
+
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f0f8ff;
+    }
+
+    /* Links inside table */
+    table a {
+        color: #2a4d7c;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    table a:hover {
+        text-decoration: underline;
+    }
+</style>
 <head>
     <meta charset="UTF-8">
     <title><?php echo esc(t('login_heading')); ?></title>

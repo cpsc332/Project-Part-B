@@ -1,8 +1,5 @@
 USE theatre_booking;
 
-ALTER TABLE customer
-  ADD COLUMN PasswordHash VARCHAR(255) NOT NULL DEFAULT '',
-  ADD COLUMN Role ENUM('customer','admin') NOT NULL DEFAULT 'customer';
 
 CREATE TABLE IF NOT EXISTS gift_code (
     GiftCodeID INT PRIMARY KEY AUTO_INCREMENT,

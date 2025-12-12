@@ -1,4 +1,131 @@
-# Logical Design and Database Implementation for Theatre Booking Database
+# Theatre Booking System - Full Stack Application
+
+## How to Use the Site
+
+### User Flow
+
+The typical user experience goes like this:
+
+1. Start at `index.php` - you'll see the homepage with links to browse movies or check your tickets
+2. Click "Browse Movies" to go to `movies.php` - search for a movie or just browse the list
+3. Click on any movie title to see showtimes at `showtimes.php` - filter by theatre or date if you want
+4. Pick a showtime and you'll land on `seats.php` - this shows a visual seat map where you can click to select seats (green = available, yellow = premium, blue = ADA, red = taken)
+5. Hit "Proceed to Checkout" and you'll go through the purchase flow
+6. After buying, search for your tickets at `my_tickets.php` using your email or ticket ID
+7. If you need to refund, click the "Request Refund" button (only works if the showtime is 2+ hours away)
+
+---
+
+## Developer Setup
+
+### Getting Started
+
+You'll need PHP 8.0+, MariaDB 10.11+, and Composer installed.
+
+**Quick setup:**
+
+```bash
+git clone <repo-url>
+cd Project-Part-B
+composer install
+
+# Create .env file
+cat > .env << EOF
+DB_HOST=localhost
+DB_NAME=theatre_booking
+DB_USER=proj_user
+DB_PASS=proj_pass
+EOF
+
+# Start MariaDB and run database setup
+sudo systemctl start mariadb
+make setup-codespace
+
+# Start the dev server
+cd public
+php -S localhost:8000
+```
+
+Visit `http://localhost:8000` and you should see the homepage.
+
+### Project Layout
+
+```
+public/          # All the pages users hit
+  index.php      # Homepage
+  movies.php     # Movie list with search
+  showtimes.php  # Showtime listings
+  seats.php      # Seat selection map
+  purchase.php   # Handles ticket purchases (POST only)
+  refund.php     # Handles refunds (POST only)
+  my_tickets.php # Ticket lookup
+
+includes/        # Backend stuff
+  config.php     # Loads .env variables
+  db.php         # Database connection
+  functions.php  # Helper functions (esc, csrf_token, param, check_token)
+  header.php     # HTML header
+  footer.php     # HTML footer
+
+sql/             # Database scripts (see Part B docs below)
+assets/          # CSS and other static files
+```
+
+### How It Works
+
+**The purchase flow:**
+- User picks seats on `seats.php`, which sends selected seat IDs to `purchase.php` by POST
+- `purchase.php` validates everything (CSRF token, email, seat availability) then calls the `sell_ticket()` stored procedure
+- If successful, redirects to `my_tickets.php` with a success message
+
+**The refund flow:**
+- User searches their tickets on `my_tickets.php`
+- Clicks "Request Refund" which POSTs to `refund.php`
+- `refund.php` checks if the ticket is refundable (2 hours before showtime, not already used, etc.) and updates the status
+
+**Security:**
+- CSRF tokens on all forms (generated with `csrf_token()`, validated with `check_token()`)
+- PDO prepared statements for all database queries
+- Output escaping with `esc()` to prevent XSS
+- POST-only for write operations
+
+### Testing It Out
+
+The seed script creates 60 test customers with emails like `customer1@example.com` through `customer60@example.com`. You can search for any of these on `my_tickets.php` to see their tickets.
+
+To test a purchase:
+1. Go to movies.php, pick a movie
+2. Choose a showtime
+3. Select some available seats (green ones)
+4. Fill out the checkout form (any name/email works)
+5. Should redirect to my_tickets with your new ticket
+
+To test a refund:
+1. Search for `customer1@example.com` on my_tickets
+2. Click "Request Refund" on any purchased ticket
+3. Make sure the showtime is far enough in the future (2+ hours)
+
+### Adding Features
+
+Want to add a new page? Copy the structure from an existing one:
+
+```php
+<?php
+session_start();
+require_once '../includes/db.php';
+require_once '../includes/functions.php';
+require_once '../includes/header.php';
+
+// Your code here
+
+require_once '../includes/footer.php';
+```
+
+Need a new database table? Add it to `sql/schema.sql` and `sql/seed.sql`, then re-run the setup scripts.
+
+---
+
+## Database Documentation (Part B)
 
 ## 1. Overview
 
@@ -180,10 +307,19 @@ CALL sell_ticket(1, 1, 1, 'STUDENT', @new_ticket_id);
 
 This should result in an error saying that the seat is already sold or reserved for this showtime, confirming that `trg_ticket_before_insert` is working.
 
-
 ### Verifying the backup procedure
 
 ```sql
 CALL backup_full_clone;
 SHOW TABLES LIKE 'back_%';
 ```
+
+---
+
+## Contributors
+
+This project was developed as part of CPSC 332 - Database Systems.
+
+## License
+
+Educational use only.
